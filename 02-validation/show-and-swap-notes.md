@@ -4,16 +4,16 @@
 
 ## What I showed
 
-_____
+The prototype was meant to demonstrate if a simple dashboard highlighting a single data point would inspire product to make faster decisions or lean into experimentation.
 
 ## What my partner understood (in their words)
 
-_____
+They believe the hypothesis is that if we highlight a single metric on a dashboard, we can make faster decisions with the data.
 
 ## Where they got confused / pushed back
 
-_____
+They were confused with the 'why this design' tab and what purpose that served. It nested my actual hypothesis and backing data in a separate view.
 
 ## What I'll change as a result
 
-_____
+I may need to revisit the instructions of the assignment to see if the hypothesis for my experiment needs to be clearly stated on the new dashboard -- ie who is the audience for this? am i pitching it to internal stakeholders?
