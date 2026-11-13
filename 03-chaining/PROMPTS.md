@@ -6,28 +6,34 @@
 
 _Each prompt is a reusable step. Chain them: the output of one becomes the input to the next._
 
-## Prompt chain: [name your flow]
+## Prompt chain: retention-and-revenue-chain
 
-### Step 1: [purpose]
+### Step 1: Expand: add the two missing screens
 ```
-[prompt text, with {{variables}} for the parts you swap]
+Build the next phase of this app in a strict sequence:
+1. Add a 2nd screen called "revenue" where we can see the gross ticket fees from each purchase flow (mobile vs. web). Make it so that revenue is somehow hyperlinked from the main page as well. 
+2. Add another screen called "retention" that demonstrates how many of these buyers are repeat users, including a definition of what retention means in this context (came back to purchase a ticket within 6 months). 
+3. Navigation: write the logic so the main page, "revenue" and "retention" all link to one another and can navigate back to the main page. No dead-end states.
 ```
-**Expects in:** _____
-**Produces out:** _____
 
-### Step 2: [purpose]
+### Step 2: Behavior: handle loading, empty and error states
 ```
-[prompt text]
-```
-**Expects in:** _____
-**Produces out:** _____
+Apply the following logic constraints to the Channel Performance flow:
+- Use skeleton screens for the App vs. web · All regions loading state.
+- If no data is present, show the empty state: "No data. Check your filters or refresh the screen.".
+- On fetch failure, trigger the error state: "Connection lost. Please refresh the dashboard.".
 
-### Step 3: [purpose]
+Maintain the same design language throughout and tether all behavior strictly to these rules.
 ```
-[prompt text]
+
+### Step 3: Refine: polish one thing on one screen
 ```
-**Expects in:** _____
-**Produces out:** _____
+The Revenue needs a professional tableau-style polish.
+1. Start by listing the 3 biggest gaps in typography and spacing compared to Tableau.
+2. Once you've identified those, resize the headers and update the interactive elements to match.
+
+Don't change anything else in the project or touch the underlying logic.
+```
 
 ## Reusable techniques learned
 
