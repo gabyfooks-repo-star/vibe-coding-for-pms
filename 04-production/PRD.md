@@ -51,8 +51,20 @@ In scope
 
 | # | Requirement | Priority | Acceptance criteria |
 |---|---|---|---|
-| 1 | _____ | _____ | _____ |
-| 2 | _____ | _____ | _____ |
+| 1 | Channel share leads with one headline metric: the app's share of purchases | Must / P0 | Visible without scrolling at 1280×800. Equals app purchases ÷ (app + web purchases) for the selected region and range, to 0.1 point. Exactly one headline-size number on the page. |
+| 2 | One recommended action with its reason, estimated impact and caveat | Must / P0 | Exactly one action per region view. Impact shown per 30 days whatever range is selected. Where the app converts below web, the action is a checkout review, not a push to the app. The caveat states the estimate is an upper bound. |
+| 3 | A plain-language takeaway under the headline, written from the data | Must / P0 | One or two sentences naming the app's share of referrals, its share of purchases, and app vs. web conversion. Wording changes when the app converts below web (as in LATAM). No fixed copy. |
+| 4 | The action opens a prefilled brief and creates a record | Must / P0 | Brief is prefilled with region, audience, change, primary metric, guardrail and impact. Owner can be chosen. Confirming creates a record in the agreed system and shows its ID. A back link returns to the dashboard. |
+| 5 | Event tracking for bounce rate and action clicks | Must / P0 | Every event listed in Data & events fires with its properties. Bounce rate (session under 15s with no interaction) and action click rate can be reported by week, region and user role. |
+| 6 | App vs. web split of referrals and purchases | Must / P0 | Both shares and raw counts are printed on screen, never only on hover. Mobile app is always blue and web always orange, on every page. |
+| 7 | Region segmentation | Must / P0 | One click switches between All regions, North America, EMEA, APAC and LATAM. Every figure, the takeaway and the action update. The selection carries across pages. |
+| 8 | Date range filter with calendar and presets | Should | Presets: last 7, 30 and 90 days, last full month, year to date. Custom range picked on a calendar, limited to dates with data. Apply, Cancel and Escape work. All date-based figures update; Retention says it uses a fixed cohort instead. |
+| 9 | Loading, empty and error states on Channel share | Should | Skeleton in the shape of the cards while loading. Empty: “No data. Check your filters or refresh the screen.” Error: “Connection lost. Please refresh the dashboard.” Each has a Refresh button. A newer request always wins over an older one. |
+| 10 | Navigation with no dead ends | Should | Page tabs for Channel share, Revenue and Retention on every product screen, marking the current page. Every screen, including the brief and its confirmation, has a way back to Channel share. |
+| 11 | Revenue page: gross ticket fees by purchase flow | Should | Headline is the app's share of gross ticket fees. Shows the definition on screen, fee and purchase splits, average fee per purchase by channel, and fees by region. Linked from the Channel share takeaway. |
+| 12 | Retention page: repeat buyers within 6 months | Should | Definition on screen: a buyer is retained if they purchase again within 6 months of their first purchase in the cohort. Shows the cohort dates, the overall repeat rate, app vs. web repeat rates and a region table. |
+| 13 | Accessible and usable on any screen | Should | Text contrast at least 4.5:1. Touch targets at least 44px on touch screens. Filters, tabs and charts work by keyboard. Every chart has a text alternative or a table. Works at phone width without sideways scrolling. |
+| 14 | Chart detail pages | Should | Every chart opens a detail page with three summary figures, a daily chart readable by hover or arrow keys, three data-driven insights, a definition and a table by region. |
 
 ## Data & events
 
