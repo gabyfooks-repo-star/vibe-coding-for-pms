@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Dashboard Nobody Reads</title>
+<meta name="description" content="Capstone showcase: a decision-first ticketing analytics dashboard, from the problem to a live product on Supabase.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+  /* Layout: one reading column, a facts rail beside the summary on wide screens, a vertical journey line. */
+  :root {
+    --bg: #f6f7f9;
+    --surface: #ffffff;
+    --ink: #161b24;
+    --ink-2: #3a4150;
+    --muted: #5d6676;
+    --line: #dde1e8;
+    --app: #1f5fae;        /* mobile app, as in the product */
+    --app-soft: #e8f0fa;
+    --web: #c8571b;        /* web, as in the product */
+    --web-soft: #fbeee6;
+    --good: #1d7a46;
+    --good-soft: #e5f4eb;
+    --open: #8a5a00;
+    --open-soft: #fbf1dc;
+    --display: "Space Grotesk", "Inter", system-ui, sans-serif;
+    --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #11151c; --surface: #181d26; --ink: #e8ebf1; --ink-2: #c2c8d3; --muted: #97a0b0; --line: #2a313d;
+      --app: #6ea2e6; --app-soft: #1b2a40; --web: #ec8a55; --web-soft: #3a2418;
+      --good: #5cc98a; --good-soft: #17301f; --open: #e4b45c; --open-soft: #33290f;
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 var(--body); }
+  a { color: var(--app); text-underline-offset: 3px; }
+  a:focus-visible, .btn:focus-visible { outline: 2px solid var(--app); outline-offset: 3px; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+
+  /* Header */
+  .masthead { border-bottom: 1px solid var(--line); background: var(--surface); }
+  .masthead .wrap { padding-block: 56px 48px; display: grid; gap: 20px; }
+  .kicker { font: 600 13px/1.3 var(--body); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  h1, h2, h3 { font-family: var(--display); letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+  h1 { font-size: clamp(36px, 6vw, 60px); line-height: 1.02; font-weight: 700; max-width: 16ch; }
+  .story { font-size: 20px; line-height: 1.5; color: var(--ink-2); max-width: 60ch; margin: 0; text-wrap: pretty; }
+  .channel-bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; max-width: 420px; }
+  .channel-bar span:first-child { width: 48.6%; background: var(--app); }
+  .channel-bar span:last-child { flex: 1; background: var(--web); }
+  .bar-caption { font-size: 13px; color: var(--muted); margin: -8px 0 0; font-variant-numeric: tabular-nums; }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  .btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 8px; font: 600 15px/1 var(--body); text-decoration: none; border: 1px solid var(--line); color: var(--ink); background: var(--surface); }
+  .btn.primary { background: var(--app); border-color: var(--app); color: #fff; }
+  @media (prefers-color-scheme: dark) { .btn.primary { color: #0d1420; } }
+
+  main .wrap { padding-block: 56px 72px; display: grid; gap: 72px; }
+  section > h2 { font-size: 28px; line-height: 1.2; font-weight: 600; margin-bottom: 20px; }
+  p { margin: 0 0 16px; }
+  .lede { color: var(--ink-2); max-width: 68ch; text-wrap: pretty; }
+
+  /* Strategy summary + facts rail */
+  .summary { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  @media (min-width: 860px) { .summary { grid-template-columns: minmax(0, 1fr) 300px; } }
+  .summary-text p { max-width: 64ch; text-wrap: pretty; }
+  .facts { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 14px; align-self: start; }
+  .fact { display: grid; gap: 2px; }
+  .fact b { font: 600 22px/1.2 var(--display); font-variant-numeric: tabular-nums; }
+  .fact span { font-size: 14px; color: var(--muted); }
+
+  /* Hypothesis */
+  .hypo { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 28px; display: grid; gap: 20px; }
+  .hypo { padding: clamp(18px, 4vw, 28px); }
+  .hypo blockquote { margin: 0; font: 500 clamp(17px, 2.4vw, 21px)/1.5 var(--display); max-width: 62ch; text-wrap: pretty; }
+  .verdict { display: inline-flex; align-self: start; justify-self: start; gap: 8px; align-items: center; padding: 6px 12px; border-radius: 999px; background: var(--open-soft); color: var(--open); font: 600 14px/1.2 var(--body); }
+  .signals { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); }
+  .signal { border: 1px solid var(--line); border-radius: 10px; padding: 18px; display: grid; gap: 8px; align-content: start; }
+  .signal h3 { font-size: 17px; font-weight: 600; }
+  .signal p { margin: 0; font-size: 15px; color: var(--ink-2); }
+  .pill { justify-self: start; font: 600 12px/1 var(--body); letter-spacing: 0.04em; text-transform: uppercase; padding: 5px 9px; border-radius: 999px; }
+  .pill.good { background: var(--good-soft); color: var(--good); }
+  .pill.open { background: var(--open-soft); color: var(--open); }
+  .note { font-size: 14px; color: var(--muted); margin: 0; }
+
+  /* Journey */
+  .journey { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+  .step { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 16px; padding-bottom: 28px; position: relative; }
+  .step::before { content: ""; position: absolute; left: 21px; top: 44px; bottom: 0; width: 2px; background: var(--line); }
+  .step:last-child::before { display: none; }
+  .num { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); border: 2px solid var(--line); font: 600 16px/1 var(--display); color: var(--ink-2); }
+  .step.live .num { border-color: var(--app); color: var(--app); }
+  .step h3 { font-size: 19px; font-weight: 600; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding-top: 9px; }
+  .mod { font: 600 12px/1 var(--body); padding: 4px 8px; border-radius: 6px; background: var(--app-soft); color: var(--app); }
+  .step p { margin: 6px 0 0; color: var(--ink-2); max-width: 64ch; text-wrap: pretty; }
+  .step a { font-weight: 500; }
+
+  /* Links */
+  .links { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); }
+  .link-card { display: grid; gap: 4px; padding: 18px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); text-decoration: none; color: var(--ink); }
+  .link-card:hover { border-color: var(--app); }
+  .link-card b { font: 600 17px/1.3 var(--display); color: var(--app); }
+  .link-card span { font-size: 14px; color: var(--muted); }
+
+  footer { border-top: 1px solid var(--line); }
+  footer .wrap { padding-block: 24px 40px; font-size: 14px; color: var(--muted); }
+  footer p { margin: 0; max-width: 72ch; }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <span class="kicker">Houselights Tickets · Capstone showcase</span>
+    <h1>The Dashboard Nobody Reads</h1>
+    <p class="story">A ticketing analytics dashboard that leads every page with one number, one takeaway and one recommended action, so decision-makers act instead of bouncing or exporting to a spreadsheet.</p>
+    <div class="channel-bar" role="img" aria-label="Mobile app 48.6% of purchases, web 51.4%"><span></span><span></span></div>
+    <p class="bar-caption">The headline it leads with: the mobile app closes 48.6% of purchases from 41.0% of referrals.</p>
+    <div class="actions">
+      <a class="btn primary" href="https://houselights-ticketing-dashboard.netlify.app">Open the live product</a>
+      <a class="btn" href="PRD.html">Read the Living PRD</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <section aria-labelledby="summary-h">
+      <h2 id="summary-h">Strategy summary</h2>
+      <div class="summary">
+        <div class="summary-text">
+          <p><strong>What I built.</strong> Houselights' channel dashboard had twelve equal-weight charts and no answer: 60% of sessions bounced within 15 seconds, and 74% of users exported to a spreadsheet to think. I rebuilt it decision-first for the mobile app PM. Each page (Channel share, Revenue, Retention) opens with one headline number, a plain-language takeaway and one recommended action per region, and that action becomes a prefilled brief in one click. It started as a clickable prototype and is now a live React app on Supabase, with email sign-in, per-user briefs protected by row level security, and every displayed value coming from the database.</p>
+          <p><strong>What I learned, and V2.</strong> When the answer is on the first screen, people act on it: in peer testing most testers went straight to the recommended action. They rarely explored filters or other views, and peers called Revenue and Retention dead ends until those pages got their own actions. I also learned that the bounce half of my hypothesis can't be judged without instrumentation I hadn't built. V2 would let people see the first screen before signing up, track bounce and action clicks against the 60% baseline, show each estimate as a range rather than one confident number, and send confirmed briefs into a real ticketing tool.</p>
+        </div>
+        <aside class="facts" aria-label="Key numbers">
+          <div class="fact"><b>60% → ?</b><span>Bounce rate baseline; not yet measured in the new product</span></div>
+          <div class="fact"><b>12 → 1</b><span>Charts competing on the landing view, down to one headline</span></div>
+          <div class="fact"><b>3 pages</b><span>Each with one recommended action per region</span></div>
+          <div class="fact"><b>Live on Supabase</b><span>Sign-in, row level security, data through Nov 25, 2026</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <section aria-labelledby="hypo-h">
+      <h2 id="hypo-h">The M2 hypothesis, and what the data says</h2>
+      <div class="hypo">
+        <blockquote>“We believe a first screen that leads with one headline metric, a plain-language takeaway, and one recommended action will cause users to act on the dashboard instead of bouncing, for the people who should make decisions from it. We’ll know we’re right when bounce rate drops and the recommended action gets clicked.”</blockquote>
+        <span class="verdict">Verdict: partly supported, not yet confirmed</span>
+        <div class="signals">
+          <div class="signal">
+            <span class="pill good">Supported</span>
+            <h3>The recommended action gets clicked</h3>
+            <p>In peer testing, most people went straight to “Start this test” on the first screen. That is the behaviour the hypothesis predicts.</p>
+          </div>
+          <div class="signal">
+            <span class="pill open">Not yet measured</span>
+            <h3>Bounce rate drops</h3>
+            <p>The product doesn't track sessions yet, so there's no number to compare with the 60% baseline. This half is neither confirmed nor refuted.</p>
+          </div>
+        </div>
+        <p class="note">The evidence is behavioural, from a small group of peer testers rather than a statistically sound sample, and the data in the product is fictional. Event tracking for bounce and action clicks is specified in the PRD and is the first V2 item.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="journey-h">
+      <h2 id="journey-h">The journey</h2>
+      <ol class="journey">
+        <li class="step">
+          <span class="num" aria-hidden="true">1</span>
+          <div>
+            <h3>The problem</h3>
+            <p>Decision-makers opened the dashboard, saw twelve charts and left. “It tells me what happened but never what to do about it.” Baselines: 60% bounce, 1.3 weekly sessions per user, 74% export to a spreadsheet.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="num" aria-hidden="true">2</span>
+          <div>
+            <h3>The hypothesis <span class="mod">M2</span></h3>
+            <p>One headline metric, one plain-language takeaway and one recommended action on the first screen will turn bouncing into acting. Success means bounce drops and the action gets clicked.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="num" aria-hidden="true">3</span>
+          <div>
+            <h3>The clickable prototype</h3>
+            <p>A high-fidelity prototype of the core screens: Channel share, Revenue and Retention by region and date, chart detail pages, a calendar filter, loading, empty and error states, and the recommended action brief.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="num" aria-hidden="true">4</span>
+          <div>
+            <h3>The Living PRD and engineering handoff</h3>
+            <p>Problem, users and jobs, scope, requirements with acceptance criteria, and the events needed to test the hypothesis, honest about what was mocked. The prototype was refactored into a React + TypeScript codebase named after the PRD's screens. <a href="PRD.html">Read the PRD</a>.</p>
+          </div>
+        </li>
+        <li class="step live">
+          <span class="num" aria-hidden="true">5</span>
+          <div>
+            <h3>The live product <span class="mod">M5</span></h3>
+            <p>Deployed on Netlify and wired to Supabase: a schema with named types and foreign keys, email sign-up and log-in, row level security so each person sees only their own briefs, last-write-wins editing, pagination, and loading, error and empty states with a 10-second limit on every request. <a href="https://houselights-ticketing-dashboard.netlify.app">houselights-ticketing-dashboard.netlify.app</a></p>
+          </div>
+        </li>
+        <li class="step live">
+          <span class="num" aria-hidden="true">6</span>
+          <div>
+            <h3>Evidence and iteration <span class="mod">M6</span></h3>
+            <p>Peer testing showed people go straight to the recommended action, and called Revenue and Retention dead ends. The sprint gave both pages their own recommended action per region, computed from each page's own data. Call: iterate, and measure bounce next.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="links-h">
+      <h2 id="links-h">Links</h2>
+      <div class="links">
+        <a class="link-card" href="https://houselights-ticketing-dashboard.netlify.app">
+          <b>Live product</b>
+          <span>Create an account with any email, then follow the recommended action.</span>
+        </a>
+        <a class="link-card" href="PRD.html">
+          <b>Living PRD</b>
+          <span>Requirements, data and events, open questions, plus a Nov 25 living update.</span>
+        </a>
+        <a class="link-card" href="PRD.md">
+          <b>PRD source (Markdown)</b>
+          <span>The same document as it sits in this repository.</span>
+        </a>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Houselights Tickets is a fictional company and every number in the product is made up for the exercise. The user-research baselines (60%, 12, 1.3, 74%) come from the course brief.</p>
+  </div>
+</footer>
+
+</body>
+</html>
