@@ -99,6 +99,7 @@
   .mod { font: 600 12px/1 var(--body); padding: 4px 8px; border-radius: 6px; background: var(--app-soft); color: var(--app); }
   .step p { margin: 6px 0 0; color: var(--ink-2); max-width: 64ch; text-wrap: pretty; }
   .step a { font-weight: 500; }
+  .step p.files { margin-top: 8px; font-size: 14px; }
 
   /* Links */
   .links { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); }
@@ -124,6 +125,7 @@
     <div class="actions">
       <a class="btn primary" href="https://houselights-ticketing-dashboard.netlify.app">Open the live product</a>
       <a class="btn" href="PRD.html">Read the Living PRD</a>
+      <a class="btn" href="https://github.com/gabyfooks-repo-star/vibe-coding-for-pms">See the M1–M6 repo</a>
     </div>
   </div>
 </header>
@@ -169,48 +171,54 @@
     </section>
 
     <section aria-labelledby="journey-h">
-      <h2 id="journey-h">The journey</h2>
+      <h2 id="journey-h">The journey, M1 to M6</h2>
       <ol class="journey">
         <li class="step">
           <span class="num" aria-hidden="true">1</span>
           <div>
-            <h3>The problem</h3>
-            <p>Decision-makers opened the dashboard, saw twelve charts and left. “It tells me what happened but never what to do about it.” Baselines: 60% bounce, 1.3 weekly sessions per user, 74% export to a spreadsheet.</p>
+            <h3>Velocity <span class="mod">M1</span></h3>
+            <p>From a vague problem to a clickable first build. The problem: decision-makers opened a twelve-chart dashboard and left (60% bounce, 74% export to a spreadsheet). “It tells me what happened but never what to do about it.”</p>
+            <p class="files"><a href="https://github.com/gabyfooks-repo-star/vibe-coding-for-pms/tree/main/01-velocity">Prototype v1 and confidence-line reflection →</a></p>
           </div>
         </li>
         <li class="step">
           <span class="num" aria-hidden="true">2</span>
           <div>
-            <h3>The hypothesis <span class="mod">M2</span></h3>
-            <p>One headline metric, one plain-language takeaway and one recommended action on the first screen will turn bouncing into acting. Success means bounce drops and the action gets clicked.</p>
+            <h3>Validation <span class="mod">M2</span></h3>
+            <p>Locked the scenario and the riskiest assumption, and wrote the hypothesis: one headline metric, one takeaway and one recommended action will turn bouncing into acting. Show &amp; Swap found the “Why this design” tab hid the hypothesis in a separate view.</p>
+            <p class="files"><a href="https://github.com/gabyfooks-repo-star/vibe-coding-for-pms/tree/main/02-validation">Validation brief, prototype v3, Show &amp; Swap notes →</a></p>
           </div>
         </li>
         <li class="step">
           <span class="num" aria-hidden="true">3</span>
           <div>
-            <h3>The clickable prototype</h3>
-            <p>A high-fidelity prototype of the core screens: Channel share, Revenue and Retention by region and date, chart detail pages, a calendar filter, loading, empty and error states, and the recommended action brief.</p>
+            <h3>Prompt Chaining <span class="mod">M3</span></h3>
+            <p>Rebuilt in chained prompts: Revenue and Retention screens, navigation with no dead ends, loading, empty and error states, a calendar filter and chart detail pages.</p>
+            <p class="files"><a href="https://github.com/gabyfooks-repo-star/vibe-coding-for-pms/tree/main/03-chaining">PROMPTS.md →</a></p>
           </div>
         </li>
         <li class="step">
           <span class="num" aria-hidden="true">4</span>
           <div>
-            <h3>The Living PRD and engineering handoff</h3>
-            <p>Problem, users and jobs, scope, requirements with acceptance criteria, and the events needed to test the hypothesis, honest about what was mocked. The prototype was refactored into a React + TypeScript codebase named after the PRD's screens. <a href="PRD.html">Read the PRD</a>.</p>
+            <h3>Production Specs <span class="mod">M4</span></h3>
+            <p>Made the build legible to an engineer: a Living PRD with requirements, acceptance criteria and the events needed to test the hypothesis, a React + TypeScript refactor named after the PRD’s screens, and an engineering handoff.</p>
+            <p class="files"><a href="https://github.com/gabyfooks-repo-star/vibe-coding-for-pms/tree/main/04-production">PRD and handoff note →</a></p>
           </div>
         </li>
         <li class="step live">
           <span class="num" aria-hidden="true">5</span>
           <div>
-            <h3>The live product <span class="mod">M5</span></h3>
-            <p>Deployed on Netlify and wired to Supabase: a schema with named types and foreign keys, email sign-up and log-in, row level security so each person sees only their own briefs, last-write-wins editing, pagination, and loading, error and empty states with a 10-second limit on every request. <a href="https://houselights-ticketing-dashboard.netlify.app">houselights-ticketing-dashboard.netlify.app</a></p>
+            <h3>Full-Stack <span class="mod">M5</span></h3>
+            <p>Wired to Supabase and deployed on Netlify: named types and foreign keys, email sign-up, row level security so each person sees only their own briefs, last-write-wins editing, pagination, and loading, error and empty states with a 10-second limit on every request.</p>
+            <p class="files"><a href="https://github.com/gabyfooks-repo-star/vibe-coding-for-pms/tree/main/05-fullstack">Schema, access rules and hardened edge cases →</a></p>
           </div>
         </li>
         <li class="step live">
           <span class="num" aria-hidden="true">6</span>
           <div>
-            <h3>Evidence and iteration <span class="mod">M6</span></h3>
-            <p>Peer testing showed people go straight to the recommended action, and called Revenue and Retention dead ends. The sprint gave both pages their own recommended action per region, computed from each page's own data. Call: iterate, and measure bounce next.</p>
+            <h3>Evals &amp; Iteration <span class="mod">M6</span></h3>
+            <p>Peer testers went straight to the recommended action, and called Revenue and Retention dead ends. The sprint gave both pages their own recommended action per region, computed from each page’s own data.</p>
+            <p class="files"><a href="https://github.com/gabyfooks-repo-star/vibe-coding-for-pms/tree/main/06-iteration">Evidence, sprint and Go / Iterate / Kill call →</a></p>
           </div>
         </li>
       </ol>
@@ -227,9 +235,9 @@
           <b>Living PRD</b>
           <span>Requirements, data and events, open questions, plus a Nov 25 living update.</span>
         </a>
-        <a class="link-card" href="PRD.md">
-          <b>PRD source (Markdown)</b>
-          <span>The same document as it sits in this repository.</span>
+        <a class="link-card" href="https://github.com/gabyfooks-repo-star/vibe-coding-for-pms">
+          <b>Course repository</b>
+          <span>Every module’s write-up, M1 Velocity to M6 Evals &amp; Iteration, plus the PRD source.</span>
         </a>
       </div>
     </section>
